@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - network.host=0.0.0.0
+      - http.host=0.0.0.0
+      - xpack.security.enabled=false
+    networks:
+      - loggingnet
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.6.0
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "12201:12201/udp"
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+    command: -e "input { gelf { host => '0.0.0.0' port => 12201 } } output { elasticsearch { hosts => ['elasticsearch'] index => 'logstash-%{+YYYY-MM-dd}'} stdout {} }"
+    networks:
+      - loggingnet
+      - coinswarmnet
+    volumes:
+      - logstash_config:/usr/share/logstash/pipeline/
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.6.0
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - loggingnet
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+networks:
+  loggingnet:
+    external: true
+  coinswarmnet:
+    external: true
+
+volumes:
+  elasticsearch_data:
+    driver: local
+  logstash_config:
+    driver: local

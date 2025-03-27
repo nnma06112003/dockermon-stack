@@ -1,0 +1,94 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:latest
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+    networks:
+      - coinswarmnet
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://192.168.60.101:12201"
+        tag: "redis"
+
+  worker:
+    image: minhanh06112003/worker:coinswarm
+    deploy:
+      replicas: 15
+      update_config:
+        parallelism: 2
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+    networks:
+      - coinswarmnet
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://192.168.60.101:12201"
+        tag: "worker"
+  rng:
+    image: minhanh06112003/rng:coinswarm
+    deploy:
+      replicas: 10
+      update_config:
+        parallelism: 2
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8001:80"
+    networks:
+      - coinswarmnet
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://192.168.60.101:12201"
+        tag: "rng"
+  hasher:
+    image: minhanh06112003/hasher:coinswarm
+    deploy:
+      replicas: 10
+      update_config:
+        parallelism: 2
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8002:80"
+    networks:
+      - coinswarmnet
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://192.168.60.101:12201"
+        tag: "hasher"
+  webui:
+    image: minhanh06112003/webui:coinswarm
+    deploy:
+      replicas: 5
+      update_config:
+        parallelism: 1
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8000:80"
+    networks:
+      - coinswarmnet
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://192.168.60.101:12201"
+        tag: "webui"
+
+networks:
+  coinswarmnet:
+    external: true

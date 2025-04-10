@@ -47,6 +47,8 @@ services:
         condition: on-failure
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_BASEPATH=/kibana
+      - SERVER_REWRITEBASEPATH=true
     networks:
       - loggingnet
     ports:

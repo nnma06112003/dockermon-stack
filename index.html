@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swarm Gateway | Powered by NGINX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #0e1117;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .logo {
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      height: 60px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #47c87a;
+    }
+
+    p {
+      margin-bottom: 30px;
+      color: #ccc;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    a {
+      text-decoration: none;
+      padding: 14px 28px;
+      background-color: #47c87a;
+      color: #0e1117;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.2s ease;
+    }
+
+    a:hover {
+      background-color: #36a967;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Nginx_logo.svg" alt="Nginx Logo">
+  </div>
+  <h1>Docker Swarm Gateway</h1>
+  <p>Reverse Proxy được điều phối bởi <strong>NGINX</strong></p>
+  <div class="links">
+    <a href="/webui/" target="_blank">🌐 Web UI</a>
+    <a href="/grafana/" target="_blank">📊 Grafana</a>
+    <a href="/kibana/" target="_blank">📊 Kibana</a>
+  </div>
+  <div class="footer">© 2025 Powered by NGINX</div>
+</body>
+</html>

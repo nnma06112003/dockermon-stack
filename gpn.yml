@@ -21,7 +21,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3000"
+      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -36,6 +36,25 @@ services:
       placement:
         constraints:
           - node.role == worker
+
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=my-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=prometheus-metrics
+      - DOCKER_INFLUXDB_INIT_RETENTION=7d
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-token
+    networks:
+      - monitornet
+    deploy:
+      replicas: 1
 
   node_exporter:
     image: prom/node-exporter:latest
@@ -62,7 +81,8 @@ networks:
 volumes:
   prometheus_data:
   grafana_data:
-
+  influxdb_data:
+    driver: local
 configs:
   prometheus_config:
     file: ./prometheus.yml

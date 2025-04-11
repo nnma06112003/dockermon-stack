@@ -22,7 +22,7 @@ services:
       - loggingnet
       - monitornet
     deploy:
-      replicas: 1
+      mode: global
       restart_policy:
         condition: on-failure
 

@@ -10,6 +10,11 @@ services:
         target: /etc/prometheus/prometheus.yml
     volumes:
       - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.external-url=http://192.168.60.101/prometheus/'
+      - '--web.route-prefix=/'
     networks:
       - monitornet
     deploy:
@@ -33,9 +38,6 @@ services:
       - monitornet
     deploy:
       replicas: 1
-      placement:
-        constraints:
-          - node.role == worker
 
   influxdb:
     image: influxdb:latest
@@ -55,24 +57,9 @@ services:
       - monitornet
     deploy:
       replicas: 1
-
-  node_exporter:
-    image: prom/node-exporter:latest
-    networks:
-      - monitornet
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--path.rootfs=/rootfs'
-    deploy:
-      mode: global  # chạy trên tất cả các node
       placement:
         constraints:
-          - node.platform.os == linux
+          - node.role == worker
 
 networks:
   monitornet:

@@ -1,17 +1,49 @@
 global:
-   scrape_interval: 15s
+  scrape_interval: 15s
 
 scrape_configs:
   - job_name: 'node'
     static_configs:
       - targets:
           - 192.168.60.101:9100
+        labels:
+          nodename: vps0
+      - targets:
           - 192.168.60.102:9100
+        labels:
+          nodename: vps01
+      - targets:
           - 192.168.60.103:9100
+        labels:
+          nodename: vps02
+      - targets:
           - 192.168.60.104:9100
+        labels:
+          nodename: vps03
+      - targets:
           - 192.168.60.105:9100
+        labels:
+          nodename: vps04
+      - targets:
           - 192.168.60.106:9100
+        labels:
+          nodename: vps05
+      - targets:
           - 192.168.60.107:9100
+        labels:
+          nodename: vps06
+      - targets:
           - 192.168.60.108:9100
+        labels:
+          nodename: vps07
+      - targets:
           - 192.168.60.109:9100
+        labels:
+          nodename: vps08
+      - targets:
           - 192.168.60.110:9100
+        labels:
+          nodename: vps09
+
+remote_write:
+  - url: "http://192.168.60.101:1234/receive"

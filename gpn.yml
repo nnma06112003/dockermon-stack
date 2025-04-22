@@ -61,6 +61,21 @@ services:
         constraints:
           - node.role == worker
 
+  telegraf:
+    image: telegraf:latest
+    ports:
+      - "1234:1234"
+    configs:
+      - source: telegraf_config
+        target: /etc/telegraf/telegraf.conf
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+    networks:
+      - monitornet
+
 networks:
   monitornet:
     external: true
@@ -73,3 +88,5 @@ volumes:
 configs:
   prometheus_config:
     file: ./prometheus.yml
+  telegraf_config:
+    file: ./telegraf.conf

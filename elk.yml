@@ -23,7 +23,7 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:8.6.0
     deploy:
-      replicas: 1
+      replicas: 2
       restart_policy:
         condition: on-failure
     ports:
